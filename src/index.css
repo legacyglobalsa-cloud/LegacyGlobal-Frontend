@@ -1,0 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Core Colors - Light Theme for Dashboard */
+    --background: 40 20% 96%;
+    --foreground: 0 0% 13%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 13%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 13%;
+
+    --primary: 43 74% 49%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 42 20% 92%;
+    --secondary-foreground: 0 0% 20%;
+
+    --muted: 42 15% 90%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 43 60% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 42 15% 85%;
+    --input: 42 15% 90%;
+    --ring: 43 74% 49%;
+
+    --radius: 0.75rem;
+
+    /* Custom Gold Palette */
+    --gold: 43 74% 49%;
+    --gold-light: 43 70% 65%;
+    --gold-dark: 43 80% 35%;
+    --gold-muted: 43 30% 25%;
+    --champagne: 40 40% 80%;
+    
+    /* Glow Effects */
+    --glow-gold: 0 0 40px hsla(43, 74%, 49%, 0.4);
+    --glow-gold-intense: 0 0 60px hsla(43, 74%, 49%, 0.6);
+    --glow-subtle: 0 0 20px hsla(43, 74%, 49%, 0.2);
+
+    /* Gradients */
+    --gradient-gold: linear-gradient(135deg, hsl(43, 74%, 49%) 0%, hsl(40, 60%, 60%) 100%);
+    --gradient-gold-dark: linear-gradient(135deg, hsl(43, 80%, 35%) 0%, hsl(43, 74%, 49%) 100%);
+    --gradient-radial-gold: radial-gradient(ellipse at center, hsla(43, 74%, 49%, 0.15) 0%, transparent 70%);
+    --gradient-hero: linear-gradient(180deg, transparent 0%, hsl(0, 0%, 2%) 100%);
+
+    --sidebar-background: 42 33% 87%;
+    --sidebar-foreground: 0 0% 13%;
+    --sidebar-primary: 43 74% 49%;
+    --sidebar-primary-foreground: 0 0% 13%;
+    --sidebar-accent: 42 25% 82%;
+    --sidebar-accent-foreground: 0 0% 13%;
+    --sidebar-border: 42 20% 75%;
+    --sidebar-ring: 43 74% 49%;
+  }
+  .dark {
+    --sidebar-background: 42 33% 87%;
+    --sidebar-foreground: 0 0% 13%;
+    --sidebar-primary: 43 74% 49%;
+    --sidebar-primary-foreground: 0 0% 13%;
+    --sidebar-accent: 42 25% 82%;
+    --sidebar-accent-foreground: 0 0% 13%;
+    --sidebar-border: 42 20% 75%;
+    --sidebar-ring: 43 74% 49%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    @apply tracking-tight;
+  }
+}
+
+@layer components {
+  /* Gold shimmer animation */
+  .gold-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gold-shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsla(43, 74%, 49%, 0.3),
+      transparent
+    );
+    transition: left 0.5s ease-in-out;
+  }
+
+  .gold-shimmer:hover::before {
+    left: 100%;
+  }
+
+  /* Glow button effect */
+  .glow-effect {
+    transition: all 0.3s ease-in-out;
+    box-shadow: var(--glow-subtle);
+  }
+
+  .glow-effect:hover {
+    box-shadow: var(--glow-gold);
+    transform: translateY(-2px);
+  }
+
+  /* Premium text gradient */
+  .text-gradient-gold {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Border glow */
+  .border-glow {
+    border: 1px solid hsl(var(--gold) / 0.3);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .border-glow:hover {
+    border-color: hsl(var(--gold) / 0.6);
+    box-shadow: var(--glow-subtle);
+  }
+
+  /* Glass effect */
+  .glass {
+    background: hsla(0, 0%, 5%, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Premium card hover */
+  .premium-card {
+    @apply bg-card border border-border rounded-2xl p-6 transition-all duration-300;
+  }
+
+  .premium-card:hover {
+    @apply border-primary/40;
+    box-shadow: var(--glow-subtle);
+    transform: translateY(-4px);
+  }
+
+  /* Floating animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Pulse glow */
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: var(--glow-subtle); }
+    50% { box-shadow: var(--glow-gold); }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  /* Fade in up */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+  }
+
+  .animation-delay-200 { animation-delay: 0.2s; }
+  .animation-delay-400 { animation-delay: 0.4s; }
+  .animation-delay-600 { animation-delay: 0.6s; }
+  .animation-delay-800 { animation-delay: 0.8s; }
+
+  /* Gradient border */
+  .gradient-border {
+    position: relative;
+    background: hsl(var(--card));
+    border-radius: var(--radius);
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: var(--gradient-gold);
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+  }
+
+  .gradient-border:hover::before {
+    opacity: 1;
+  }
+
+  /* Grain Effect */
+  .bg-grain {
+    position: relative;
+  }
+
+  .bg-grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.03;
+    z-index: 1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    filter: contrast(150%) brightness(100%);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--gold-dark));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--gold));
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
