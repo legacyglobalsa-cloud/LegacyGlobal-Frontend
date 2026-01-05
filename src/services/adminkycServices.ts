@@ -102,5 +102,7 @@ export const rejectKYCDocument = async (
 
 // Get document view URL (for iframe/new tab)
 export const getDocumentViewUrl = (companyId: string, documentType: string): string => {
-  return `${axios.defaults.baseURL}/company/kyc/admin/${companyId}/document/${documentType}`;
+  const token = localStorage.getItem("token");
+  const baseUrl = `${axios.defaults.baseURL}/company/kyc/admin/${companyId}/document/${documentType}`;
+  return token ? `${baseUrl}?token=${token}` : baseUrl;
 };
