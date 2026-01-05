@@ -1,5 +1,7 @@
   import { io, Socket } from "socket.io-client";
 
+  const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:5000";
+
   let socket: Socket | null = null;
 
   export const initializeSocket = (token: string) => {
@@ -16,7 +18,7 @@
 
     console.log("🔌 Creating socket connection...");
 
-    socket = io("http://localhost:5000", {
+    socket = io(SOCKET_URL, {
       auth: { token },
       autoConnect: true, //  Auto-connect on creation
       reconnection: true, //  Enable auto-reconnection
@@ -178,4 +180,5 @@
 
     console.log("🔇 Removing company listeners...");
     socket.off("company:profile-updated");
+
   };
