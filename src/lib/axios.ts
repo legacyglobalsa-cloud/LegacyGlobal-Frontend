@@ -9,6 +9,7 @@ const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
+
 // Request interceptor to handle different content types and add auth token
 axiosInstance.interceptors.request.use(
   (config) => {
@@ -38,10 +39,15 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        await axios.post("/auth/refresh-token");
+        const refreshResponse = await axiosInstance.post("/auth/refresh-token");
+        const newToken = refreshResponse.data.accessToken;
+        if (newToken) {
+          localStorage.setItem("token", newToken);
+        }
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        // Refresh failed, redirect to login
+        // Refresh failed, clear token and redirect to login
+        localStorage.removeItem("token");
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }
@@ -50,6 +56,5 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 
 export default axiosInstance;
