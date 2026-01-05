@@ -1,13 +1,14 @@
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000/api", // Adjust to your backend URL
+  baseURL: API_URL,
   withCredentials: true, // Important for cookies
   headers: {
     "Content-Type": "application/json",
   },
 });
-
 // Request interceptor to handle different content types and add auth token
 axiosInstance.interceptors.request.use(
   (config) => {
@@ -49,5 +50,6 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 
 export default axiosInstance;
