@@ -20,6 +20,7 @@ export function SignupForm({
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
+    fullname: "",
     email: "",
     phone: "",
     password: "",
@@ -67,6 +68,18 @@ export function SignupForm({
                   Enter your email below to create your account
                 </p>
               </div>
+
+              <Field>
+                <FieldLabel htmlFor="fullname">Fullname</FieldLabel>
+                <Input
+                  id="fullname"
+                  type="fullname"
+                  placeholder="John Dela Cruz"
+                  value={formData.fullname}
+                  onChange={handleChange}
+                  required
+                />
+              </Field>
 
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
