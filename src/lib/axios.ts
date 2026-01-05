@@ -34,8 +34,11 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // If access token expired, try to refresh
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Don't retry for refresh-token endpoint or if already retried
+    const isRefreshRequest = originalRequest.url?.includes("/auth/refresh-token");
+    
+    // If access token expired, try to refresh (but not for the refresh endpoint itself)
+    if (error.response?.status === 401 && !originalRequest._retry && !isRefreshRequest) {
       originalRequest._retry = true;
 
       try {
@@ -43,6 +46,7 @@ axiosInstance.interceptors.response.use(
         const newToken = refreshResponse.data.accessToken;
         if (newToken) {
           localStorage.setItem("token", newToken);
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
         }
         return axiosInstance(originalRequest);
       } catch (refreshError) {
@@ -51,6 +55,13 @@ axiosInstance.interceptors.response.use(
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }
+    }
+
+    // If refresh-token itself fails with 401, just redirect to login (don't loop)
+    if (error.response?.status === 401 && isRefreshRequest) {
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+      return Promise.reject(error);
     }
 
     return Promise.reject(error);
