@@ -10,14 +10,27 @@ interface AuthGuardProps {
 
 export default function AuthGuard({ allowedRoles }: AuthGuardProps) {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<{ role: Role } | null>(null);
 
   useEffect(() => {
     const checkAuth = async () => {
+      // First check if token exists
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
       try {
         const res = await axios.get("/auth/role");
         setUser(res.data.user);
-      } catch {
+      } catch (error) {
+        console.error("Auth check failed:", error);
+        // Only clear token if it's definitely invalid (401)
+        if ((error as any)?.response?.status === 401) {
+          localStorage.removeItem("token");
+        }
         setUser(null);
       } finally {
         setLoading(false);
@@ -27,7 +40,13 @@ export default function AuthGuard({ allowedRoles }: AuthGuardProps) {
     checkAuth();
   }, []);
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!user) {
     return <Navigate to="/login" replace />;
